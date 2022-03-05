@@ -15,7 +15,7 @@ struct Preference {
             return defaults.bool(forKey: .useFlashDots)
         }
         set {
-            defaults.set(newValue, forKey: .showDockIcon)
+            defaults.set(newValue, forKey: .useFlashDots)
             defaults.synchronize()
         }
     }
@@ -48,5 +48,11 @@ struct Preference {
             defaults.set(newValue, forKey: .firstRunGone)
             defaults.synchronize()
         }
+    }
+    
+    static func restore() {
+        Preference.showSeconds = true
+        Preference.useFlashDots = false
+        Preference.showDockIcon = false
     }
 }

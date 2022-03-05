@@ -20,6 +20,18 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         "😶‍🌫️",
         "👽"
     ]
+    
+    var separatorStatus: NSControl.StateValue = .on
+    
+    var reminders: [Reminder] = [] {
+        didSet {
+            if let menu = statusBarItem.menu, let item = menu.item(withTag: 5) {
+                item.submenu = self.getRemindersMenu()
+                item.isEnabled = reminders.count > 0
+            }
+        }
+    }
+
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         print("앱 실행 완료")
@@ -85,6 +97,31 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             return item
         }()
         
+        let reminderItem: NSMenuItem = {
+            let item = NSMenuItem(title: "Reminders",
+                                  action: nil,
+                                  keyEquivalent: ""
+            )
+            item.tag = 5
+            
+            let menu = NSMenu()
+            
+            for reminder in self.reminders {
+                menu.addItems(.init(title: reminder.title, action: nil, keyEquivalent: ""))
+            }
+            
+            item.isEnabled = reminders.count > 0
+            
+            return item
+        }()
+        
+        let addReminderItem: NSMenuItem = {
+            let item = NSMenuItem(title: "New Reminder", action: #selector(addReminder), keyEquivalent: "")
+            item.tag = 6
+            item.target = self
+            return item
+        }()
+        
         statusMenu.addItems(
             toggleFlashingSeparatorsItem,
             toggleDockIconItem,
@@ -95,6 +132,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             
                 .separator(),
             
+            reminderItem,
+            addReminderItem,
+            
             quitApplicationItem
         )
         
@@ -104,6 +144,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
          This will update 'title' of 'statusBarItem' even if is highligheted.
          */
         RunLoop.main.add(timer!, forMode: .common)
+    }
+    
+    func applicationWillFinishLaunching(_ notification: Notification) {
+        if Preference.firstRunGone == false {
+            Preference.firstRunGone = true
+            Preference.restore()
+        }
+        
+        DockIcon.standard.setVisibility(Preference.showDockIcon)
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
@@ -126,7 +175,13 @@ extension AppDelegate {
     @objc
     func updateStatusText(_ sender: Timer) {
         guard let statusButton = statusBarItem.button else { return }
-        statusButton.title = Preference.showSeconds ? Date.now.stringTimeWithSeconds : Date.now.stringTime
+        var title: String = (Preference.showSeconds ? Date.now.stringTimeWithSeconds : Date.now.stringTime)
+
+        if Preference.useFlashDots && Date.now.seconds % 2 == 0 {
+            title = title.replacingOccurrences(of: ":", with: " ")
+        }
+
+        statusButton.title = title
     }
     
     @objc
@@ -142,6 +197,8 @@ extension AppDelegate {
     @objc
     func toggleDockIcon(_ sender: NSMenuItem) {
         Preference.showDockIcon = !Preference.showDockIcon
+        
+        DockIcon.standard.setVisibility(Preference.showDockIcon)
         
         if let menu = statusBarItem.menu, let item = menu.item(withTag: 2) {
             item.state = Preference.showDockIcon.stateValue
@@ -161,5 +218,65 @@ extension AppDelegate {
     @objc
     func terminate(_ sender: NSMenuItem) {
         NSApp.terminate(sender)
+    }
+    
+    @objc
+    func addReminder(_ sender: NSMenuItem) {
+        if let vc = WindowsManager.getVC(withIdentifier: "NewReminderVC", ofType: NewReminderVC.self) {
+            vc.delegate = self
+            let window: NSWindow = {
+                let w = NSWindow(contentViewController: vc)
+                
+                w.styleMask.remove(.fullScreen)
+                w.styleMask.remove(.resizable)
+                w.styleMask.remove(.miniaturizable)
+                
+                w.level = .floating
+                
+                return w
+            }()
+            
+//            if REMINDERS_WINDOW_CONTROLLER.window == nil {
+//                REMINDERS_WINDOW_CONTROLLER.window = window
+//            }
+//
+//            REMINDERS_WINDOW_CONTROLLER.showWindow(self)
+        }
+    }
+}
+
+extension AppDelegate: NewReminderVCDelegate, ReminderDelegate {
+    
+    // On submit close the window and save the reminder
+    func onSubmit(_ sender: NSButton, reminder: Reminder) {
+        reminder.delegate = self
+        if reminder.tag == nil {
+            reminder.tag = reminders.count
+        }
+        
+//        REMINDERS_WINDOW_CONTROLLER.close()
+        reminders.append(reminder)
+    }
+    
+    // Once a reminder is fired, let's delete it
+    func onReminderFired(_ reminder: Reminder) {
+        reminders.removeAll(where: { $0.tag == reminder.tag })
+    }
+}
+
+/*
+ * -----------------------
+ * MARK: - Utilities
+ * ------------------------
+ */
+extension AppDelegate {
+    private func getRemindersMenu() -> NSMenu {
+        let menu = NSMenu()
+        
+        for reminder in self.reminders {
+            menu.addItem(.init(title: reminder.title, action: nil, keyEquivalent: ""))
+        }
+        
+        return menu
     }
 }

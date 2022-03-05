@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		985C5C9827D33A3900686F34 /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 985C5C9727D33A3900686F34 /* Date+Extension.swift */; };
+		985C5C9A27D33B9600686F34 /* Int+Extension.swift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 985C5C9927D33B9600686F34 /* Int+Extension.swift.swift */; };
 		98A00EB027D3349D0009B7AD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98A00EAF27D3349D0009B7AD /* AppDelegate.swift */; };
 		98A00EB227D3349D0009B7AD /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98A00EB127D3349D0009B7AD /* ViewController.swift */; };
 		98A00EB427D3349E0009B7AD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 98A00EB327D3349E0009B7AD /* Assets.xcassets */; };
@@ -34,6 +36,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		985C5C9727D33A3900686F34 /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
+		985C5C9927D33B9600686F34 /* Int+Extension.swift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Extension.swift.swift"; sourceTree = "<group>"; };
 		98A00EAC27D3349D0009B7AD /* Clock.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Clock.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		98A00EAF27D3349D0009B7AD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		98A00EB127D3349D0009B7AD /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -72,6 +76,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		985C5C9627D33A2800686F34 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				985C5C9727D33A3900686F34 /* Date+Extension.swift */,
+				985C5C9927D33B9600686F34 /* Int+Extension.swift.swift */,
+			);
+			path = Extension;
+			sourceTree = "<group>";
+		};
 		98A00EA327D3349D0009B7AD = {
 			isa = PBXGroup;
 			children = (
@@ -95,6 +108,7 @@
 		98A00EAE27D3349D0009B7AD /* Clock */ = {
 			isa = PBXGroup;
 			children = (
+				985C5C9627D33A2800686F34 /* Extension */,
 				98A00EAF27D3349D0009B7AD /* AppDelegate.swift */,
 				98A00EB127D3349D0009B7AD /* ViewController.swift */,
 				98A00EB327D3349E0009B7AD /* Assets.xcassets */,
@@ -253,6 +267,8 @@
 			files = (
 				98A00EB227D3349D0009B7AD /* ViewController.swift in Sources */,
 				98A00EB027D3349D0009B7AD /* AppDelegate.swift in Sources */,
+				985C5C9A27D33B9600686F34 /* Int+Extension.swift.swift in Sources */,
+				985C5C9827D33A3900686F34 /* Date+Extension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

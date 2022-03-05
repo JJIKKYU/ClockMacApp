@@ -10,11 +10,14 @@ import Cocoa
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
 
-    
+    var statusBarItem: NSStatusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
 
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
-        // Insert code here to initialize your application
+        print("앱 실행 완료")
+        
+        guard let statusButton = statusBarItem.button else { return }
+        statusButton.title = "Advanced Clock"
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {

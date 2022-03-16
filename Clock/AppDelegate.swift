@@ -14,11 +14,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var timer: Timer? = nil
     
     let text: Array<String> = [
-        "👍",
-        "🤖",
-        "🥰",
-        "😶‍🌫️",
-        "👽"
+        "🍺 마시고싶다마시고싶다마시고싶다",
+        "🍔 먹고싶다마시고싶다",
+        "🎬 보고싶다마시고싶다마시고싶다마시고싶다마시고싶다",
+        "🎤 부르고싶다",
+        "🎮 하고싶다"
     ]
     
     var separatorStatus: NSControl.StateValue = .on
@@ -37,8 +37,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         print("앱 실행 완료")
         
         guard let statusButton = statusBarItem.button else { return }
-
-        statusButton.title = Preference.showSeconds ? Date.now.stringTimeWithSeconds : Date.now.stringTime
+        
+        let randNum = Int.random(in: 0...4)
+        statusButton.title = text[randNum]
+//        statusButton.imageScaling = .scaleAxesIndependently
+        
+//        statusButton.title = Preference.showSeconds ? Date.now.stringTimeWithSeconds : Date.now.stringTime
+        
         
         timer = Timer.scheduledTimer(timeInterval: 1,
                                      target: self,
@@ -181,7 +186,9 @@ extension AppDelegate {
             title = title.replacingOccurrences(of: ":", with: " ")
         }
 
-        statusButton.title = title
+        // statusButton.title = title
+        let randNum = Int.random(in: 0...4)
+        statusButton.title = text[randNum]
     }
     
     @objc
